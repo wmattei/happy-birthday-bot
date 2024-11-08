@@ -1,5 +1,5 @@
 import { Jimp, JimpInstance, loadFont } from "jimp";
-import { createCanvas, registerFont } from "node-canvas";
+import { createCanvas, registerFont } from "canvas";
 import {
   S3Client,
   PutObjectCommand,
@@ -94,12 +94,12 @@ export class ImageService {
   }
 
   async upload() {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("Uploading image...");
+    // if (process.env.NODE_ENV !== "production") {
+    //   console.log("Uploading image...");
 
-      this.baseImage.write(`./uploads/${this.name}.png`);
-      return;
-    }
+    //   this.baseImage.write(`./uploads/${this.name}.png`);
+    //   return;
+    // }
 
     try {
       const s3Client = new S3Client({});
@@ -110,7 +110,7 @@ export class ImageService {
         Key: `${this.name}.png`,
         Body: buffer,
         ContentType: "image/png",
-        ACL: "public-read",
+        // ACL: "public-read",
       };
 
       const data = await s3Client.send(new PutObjectCommand(uploadParams));

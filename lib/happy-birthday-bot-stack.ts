@@ -1,10 +1,17 @@
 import * as cdk from "aws-cdk-lib";
 import { Rule, Schedule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
-import { Architecture, LayerVersion, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import {
+  Architecture,
+  DockerImageCode,
+  DockerImageFunction,
+  LayerVersion,
+  Runtime,
+} from "aws-cdk-lib/aws-lambda";
 
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
-import { Bucket } from "aws-cdk-lib/aws-s3";
+import { Bucket, BucketAccessControl } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 
 export class HappyBirthdayBotStack extends cdk.Stack {
@@ -16,34 +23,21 @@ export class HappyBirthdayBotStack extends cdk.Stack {
       bucketName: "happy-birthday-images",
     });
 
-    const lambda = new NodejsFunction(this, "HappyBirthdayBotFunction", {
+    s3.addToResourcePolicy(
+      new PolicyStatement({
+        actions: ["s3:GetObject"],
+        resources: [`${s3.bucketArn}/*`],
+        principals: [new cdk.aws_iam.AnyPrincipal()],
+        effect: Effect.ALLOW,
+      })
+    );
+
+    const lambda = new DockerImageFunction(this, "HappyBirthdayBotFunction", {
       architecture: Architecture.ARM_64,
       timeout: cdk.Duration.minutes(1),
-      memorySize: 256,
-      entry: "src/happy-birthday-bot/index.ts",
+      memorySize: 1024,
+      code: DockerImageCode.fromImageAsset(""),
       functionName: "HappyBirthdayBotFunction",
-      runtime: Runtime.NODEJS_20_X,
-      layers: [
-        LayerVersion.fromLayerVersionArn(
-          this,
-          "Layer",
-          "arn:aws:lambda:us-east-1:063257378709:layer:canvas-nodejs:1"
-        ),
-      ],
-      bundling: {
-        externalModules: ["canvas"],
-        commandHooks: {
-          afterBundling(inputDir, outputDir) {
-            return [`cp -r ${inputDir}/src/assets ${outputDir}`];
-          },
-          beforeBundling() {
-            return [];
-          },
-          beforeInstall() {
-            return [];
-          },
-        },
-      },
       environment: {
         NODE_ENV: "production",
         S3_BUCKET_NAME: s3.bucketName,

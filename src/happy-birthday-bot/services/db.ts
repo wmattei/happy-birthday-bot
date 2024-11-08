@@ -43,10 +43,10 @@ export class DbService {
   public getTodaysNumbers(): Array<{ name: string; number: string }> {
     const timeZone = "America/Asuncion";
     const today = getCurrentTimeInTimeZoneIntl(timeZone);
-    // const today = "15/12";
+    // const today = "12/15";
 
     return this.data
-      .filter((row: any) => row[1] === today)
+      .filter((row: any) => row[1] === today.split("/").reverse().join("/"))
       .map((row: any) => ({ name: row[0], number: row[2] }));
   }
 }

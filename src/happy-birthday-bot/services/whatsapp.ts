@@ -12,9 +12,9 @@ export class WhatsappService {
 
     this.phoneNumber = number;
 
-    if (process.env.NODE_ENV !== "production") {
-      this.phoneNumber = "+554599598308";
-    }
+    // if (process.env.NODE_ENV !== "production") {
+    this.phoneNumber = "+595971835923";
+    // }
   }
 
   public async send(mediaUrl: string) {
