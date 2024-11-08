@@ -1980,6 +1980,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sendgrid/client@npm:^8.1.4":
+  version: 8.1.4
+  resolution: "@sendgrid/client@npm:8.1.4"
+  dependencies:
+    "@sendgrid/helpers": ^8.0.0
+    axios: ^1.7.4
+  checksum: dde22db19d745c0f826fc5b5e1feaa99318e059391e8a7879ac4ae6a0b0297d7d0179bfb939e46c475ec5c0b494cdec753d16f1923da1ec9bf831028c9c6c935
+  languageName: node
+  linkType: hard
+
+"@sendgrid/helpers@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sendgrid/helpers@npm:8.0.0"
+  dependencies:
+    deepmerge: ^4.2.2
+  checksum: 758cab1cb67c8d32632c7a599b2840186dcebc7e9fbc382633b5268d08ecf1de80817730ccbb5d0ad61905407070fa0a59c54d523e7b808b35b403ea0d4db22d
+  languageName: node
+  linkType: hard
+
+"@sendgrid/mail@npm:^8.1.4":
+  version: 8.1.4
+  resolution: "@sendgrid/mail@npm:8.1.4"
+  dependencies:
+    "@sendgrid/client": ^8.1.4
+    "@sendgrid/helpers": ^8.0.0
+  checksum: 0b0b01ec211d8b620038fa33a315652533f8f217ac8a6d1e208a1415b85d6a3f26b3a318e607aa18ad83d6addfd08a1bfb68db2c4df368915af7817371d934d8
+  languageName: node
+  linkType: hard
+
 "@sinclair/typebox@npm:^0.27.8":
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
@@ -4284,6 +4313,7 @@ __metadata:
     "@aws-sdk/client-s3": ^3.658.1
     "@jimp/plugin-print": ^1.6.0
     "@jimp/types": ^1.6.0
+    "@sendgrid/mail": ^8.1.4
     "@types/aws-lambda": ^8.10.145
     "@types/jest": ^29.5.12
     "@types/node": 20.14.2

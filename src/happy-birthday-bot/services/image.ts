@@ -19,7 +19,9 @@ export class ImageService {
     this.baseImage = new Jimp({ height: 1599, width: 1039 });
     this.baseImage.background = 0x000000;
 
-    registerFont(path.resolve(__dirname, "../../assets/gagalin.otf"), {
+    const assetsPath =
+      process.env.NODE_ENV === "production" ? "assets" : "../../assets";
+    registerFont(path.resolve(__dirname, `${assetsPath}/gagalin.otf`), {
       family: "Gagalin",
     });
   }
@@ -91,6 +93,10 @@ export class ImageService {
     );
 
     return this;
+  }
+
+  async getBuffer() {
+    return this.baseImage.getBuffer("image/png");
   }
 
   async upload() {

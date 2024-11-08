@@ -2,9 +2,10 @@ import { EventBridgeHandler } from "aws-lambda";
 import { DbService } from "./services/db";
 import { ImageService } from "./services/image";
 import { WhatsappService } from "./services/whatsapp";
+import { MailService } from "./services/mail";
 
 export const handler = async (event: any, context: any): Promise<void> => {
-  // require("dotenv").config();
+  require("dotenv").config();
 
   console.info("Starting Happy Birthday Bot");
   // return;
@@ -22,6 +23,8 @@ export const handler = async (event: any, context: any): Promise<void> => {
 
     console.info("Numbers to congratulate: ", numbers);
 
+    const images: Buffer[] = [];
+
     for (const { name, number } of numbers) {
       try {
         const firstName = name.split(" ")[0];
@@ -29,20 +32,27 @@ export const handler = async (event: any, context: any): Promise<void> => {
         const imageService = new ImageService();
         imageService.setName(firstName);
         await imageService.build();
-        await imageService.upload();
+        // await imageService.upload();
+        const image = await imageService.getBuffer();
+        images.push(image);
 
-        const wp = new WhatsappService(
-          `${number?.toString().includes("+") ? number : `+595${number}`}`
-        );
+        // const wp = new WhatsappService(
+        //   `${number?.toString().includes("+") ? number : `+595${number}`}`
+        // );
 
-        await wp.send(
-          `https://${process.env.S3_BUCKET_NAME}.s3.us-east-1.amazonaws.com/${firstName}.png`
-        );
+        // await wp.send(
+        //   `https://${process.env.S3_BUCKET_NAME}.s3.us-east-1.amazonaws.com/${firstName}.png`
+        // );
 
         console.info("Message sent to: ", name);
       } catch (error) {
         console.error("Error sending message: ", error);
       }
+    }
+
+    if (images.length > 0) {
+      const mailService = new MailService();
+      await mailService.send(images);
     }
 
     console.info("Happy Birthday Bot finished");
