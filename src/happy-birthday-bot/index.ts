@@ -5,7 +5,7 @@ import { WhatsappService } from "./services/whatsapp";
 import { MailService } from "./services/mail";
 
 export const handler = async (event: any, context: any): Promise<void> => {
-  require("dotenv").config();
+  // require("dotenv").config();
 
   console.info("Starting Happy Birthday Bot");
   // return;

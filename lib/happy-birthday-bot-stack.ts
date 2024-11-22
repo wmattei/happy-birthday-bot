@@ -34,7 +34,7 @@ export class HappyBirthdayBotStack extends cdk.Stack {
 
     const lambda = new DockerImageFunction(this, "HappyBirthdayBotFunction", {
       architecture: Architecture.ARM_64,
-      timeout: cdk.Duration.minutes(1),
+      timeout: cdk.Duration.minutes(5),
       memorySize: 1024,
       code: DockerImageCode.fromImageAsset(""),
       functionName: "HappyBirthdayBotFunction",
@@ -47,8 +47,8 @@ export class HappyBirthdayBotStack extends cdk.Stack {
     s3.grantReadWrite(lambda);
     new Rule(this, "MorningRule", {
       description:
-        "Schedule the Happy Birthday Bot to run every morning at 08:00 am",
-      schedule: Schedule.expression("cron(0 12 * * ? *)"),
+        "Schedule the Happy Birthday Bot to run every morning at 06:00 am",
+      schedule: Schedule.expression("cron(0 9 * * ? *)"),
       ruleName: "MorningRule",
       targets: [new LambdaFunction(lambda)],
     });
